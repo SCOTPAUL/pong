@@ -50,12 +50,12 @@ class Ball(object):
         self.px += self.vx
         self.py += self.vy
 
-        if self.rect.top <= pad1.rect.bottom:
+        if self.rect.top <= pad1.rect.bottom and self.rect.right >= pad1.rect.left and self.rect.left <= pad1.rect.right:
             print self.rect.top, pad1.rect.bottom
             self.paddleReflect()
             self.py = 31
 
-        if self.rect.bottom >= pad2.rect.top:
+        if self.rect.bottom >= pad2.rect.top and self.rect.right >= pad2.rect.left and self.rect.left <= pad2.rect.right:
             self.paddleReflect()
             self.py = WH[1] - 31
 
