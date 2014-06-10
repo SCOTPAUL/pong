@@ -43,12 +43,21 @@ class Ball(object):
         self.vy = vy
 
 
-    def move(self):
+    def move(self, pad1, pad2):
         self.rect = self.surface.get_rect(center =(self.px, self.py))
         self.surface.fill(self.colour)
 
         self.px += self.vx
         self.py += self.vy
+
+        if self.rect.top <= pad1.rect.bottom:
+            print self.rect.top, pad1.rect.bottom
+            self.paddleReflect()
+            self.py = 31
+
+        if self.rect.bottom >= pad2.rect.top:
+            self.paddleReflect()
+            self.py = WH[1] - 31
 
 
     def sideReflect(self):
@@ -61,27 +70,38 @@ class Ball(object):
 
 class Paddle(object):
 
-    def __init__(self, px, py):
+    def __init__(self, px, py, w, h, colour = (255,255,255)):
         self.px = px
         self.py = py
+
+        self.colour = colour
+        
+        self.surface = pygame.Surface([w, h])
+        self.rect = self.surface.get_rect(center =(px, py))
+        self.surface.fill(self.colour)
 
 
     def move(self, dx, dy):
         self.px += dx
         self.py += dy
 
-ball = Ball(WH[0]/2, WH[1]/2, 0, 5, 5, 5)
-WHITE = (255, 255, 255)
+
+    def draw(self, screen):
+        screen.blit(self.surface, self.rect)
+
+
+ball = Ball(WH[0]/2, WH[1]/2, 0, -5, 10, 10)
+pad1 = Paddle(WH[0]/2, 20, 50, 10)
+pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
 
 
 while True:
     windowSurface.fill((0, 0, 0))
 
-    if ball.py <= 0 or ball.py >= WH[1]:
-        ball.paddleReflect()
-
-    ball.move()
+    ball.move(pad1, pad2)
     ball.draw(windowSurface)
+    pad1.draw(windowSurface)
+    pad2.draw(windowSurface)
 
     print ball.py
 
