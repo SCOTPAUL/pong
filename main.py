@@ -90,9 +90,35 @@ class Paddle(object):
         screen.blit(self.surface, self.rect)
 
 
+class Score(object):
+
+    def __init__(self, score1, score2, colour = (255, 255, 255), font = "Lucida Console", size = 30):
+        self.score1 = score1
+        self.score2 = score2
+        self.colour = colour
+        self.font = font
+        self.size = size
+
+        self.myfont = pygame.font.SysFont(self.font, self.size, bold = True)
+
+    def incScore(whichScore, val = 1):
+        if whichScore == 1:
+            self.score1 += val
+        elif whichScore == 2:
+            self.score2 += val
+
+
+    def draw(self, screen):
+        score1text = self.myfont.render(str(self.score1), True, self.colour)
+        score2text = self.myfont.render(str(self.score2), True, self.colour)
+
+        screen.blit(score1text, (20, 20))
+        screen.blit(score2text, (WH[0]-20-self.size/2.0, 20))
+
 ball = Ball(WH[0]/2, WH[1]/2, 0, -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 50, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
+score = Score(0, 0)
 
 
 while True:
@@ -102,8 +128,7 @@ while True:
     ball.draw(windowSurface)
     pad1.draw(windowSurface)
     pad2.draw(windowSurface)
-
-    print ball.py
+    score.draw(windowSurface)
 
     for event in pygame.event.get():
         if event.type == QUIT:
