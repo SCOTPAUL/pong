@@ -11,6 +11,7 @@ fpsClock = pygame.time.Clock()
 windowSurface = pygame.display.set_mode(WH)
 pygame.display.set_caption("Pong")
 
+
 class Ball(object):
 
     def __init__(self, px, py, vx, vy, w ,h, colour = (255, 255, 255)):
@@ -43,6 +44,20 @@ class Ball(object):
         self.vy = vy
 
 
+    def touchPaddle(self, pad1, pad2):
+        if self.rect.top <= pad1.rect.bottom and self.rect.right >= pad1.rect.left and self.rect.left <= pad1.rect.right:
+            if self.rect.bottom >= pad1.rect.top:
+                return 1
+
+        elif self.rect.bottom >= pad2.rect.top and self.rect.right >= pad2.rect.left and self.rect.left <= pad2.rect.right:
+            if self.rect.top <= pad2.rect.bottom:
+                return 2
+
+        else:
+            return 0
+
+
+
     def move(self, pad1, pad2):
         self.rect = self.surface.get_rect(center =(self.px, self.py))
         self.surface.fill(self.colour)
@@ -50,12 +65,11 @@ class Ball(object):
         self.px += self.vx
         self.py += self.vy
 
-        if self.rect.top <= pad1.rect.bottom and self.rect.right >= pad1.rect.left and self.rect.left <= pad1.rect.right:
-            print self.rect.top, pad1.rect.bottom
+        if self.touchPaddle(pad1, pad2) == 1:
             self.paddleReflect()
             self.py = 31
 
-        if self.rect.bottom >= pad2.rect.top and self.rect.right >= pad2.rect.left and self.rect.left <= pad2.rect.right:
+        if self.touchPaddle(pad1, pad2) == 2:
             self.paddleReflect()
             self.py = WH[1] - 31
 
