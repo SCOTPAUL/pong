@@ -77,13 +77,20 @@ class Paddle(object):
         self.colour = colour
         
         self.surface = pygame.Surface([w, h])
-        self.rect = self.surface.get_rect(center =(px, py))
+        self.rect = self.surface.get_rect(center =(self.px, self.py))
         self.surface.fill(self.colour)
 
 
-    def move(self, dx, dy):
-        self.px += dx
-        self.py += dy
+    def setPos(self, px, py):
+        self.px = px
+        self.py = py
+
+
+    def update(self):
+        mouseX = pygame.mouse.get_pos()[0]
+        self.px = mouseX
+        self.rect = self.surface.get_rect(center =(self.px, self.py))
+        print mouseX
 
 
     def draw(self, screen):
@@ -100,10 +107,9 @@ while True:
 
     ball.move(pad1, pad2)
     ball.draw(windowSurface)
+    pad2.update()
     pad1.draw(windowSurface)
     pad2.draw(windowSurface)
-
-    print ball.py
 
     for event in pygame.event.get():
         if event.type == QUIT:
