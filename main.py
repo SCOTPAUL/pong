@@ -104,7 +104,7 @@ class Score(object):
 
         self.myfont = pygame.font.SysFont(self.font, self.size, bold = True)
 
-    def incScore(whichScore, val = 1):
+    def incScore(self, whichScore, val = 1):
         if whichScore == 1:
             self.score1 += val
         elif whichScore == 2:
@@ -118,7 +118,7 @@ class Score(object):
         screen.blit(score1text, (self.px, self.py))
         screen.blit(score2text, (WH[0]-self.px-self.size/2.0, self.py))
 
-ball = Ball(WH[0]/2, WH[1]/2, 0, -5, 10, 10)
+ball = Ball(10, WH[1]/2, 0, 5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 50, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
 score = Score(0, 0, 20, WH[1]/2.0-30)
@@ -128,6 +128,15 @@ while True:
     windowSurface.fill((0, 0, 0))
 
     ball.move(pad1, pad2)
+
+    if ball.py <= 0:
+        score.incScore(1)
+        ball.set_p(WH[0]/2.0, WH[1]/2.0)
+    elif ball.py >= WH[1]:
+        score.incScore(2)
+        ball.set_p(WH[0]/2.0, WH[1]/2.0)
+
+
     ball.draw(windowSurface)
     pad1.draw(windowSurface)
     pad2.draw(windowSurface)
