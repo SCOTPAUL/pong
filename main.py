@@ -68,6 +68,7 @@ class Ball(object):
         if self.touchPaddle(pad1, pad2) == 1:
             self.paddleReflect()
             self.py = 31
+            
 
         if self.touchPaddle(pad1, pad2) == 2:
             self.paddleReflect()
@@ -110,9 +111,41 @@ class Paddle(object):
         screen.blit(self.surface, self.rect)
 
 
-ball = Ball(WH[0]/2, WH[1]/2, 0, -5, 10, 10)
+class Score(object):
+
+    def __init__(self, score1, score2, px, py, colour = (255, 255, 255), font = "Lucida Console", size = 30):
+        self.score1 = score1
+        self.score2 = score2
+        self.colour = colour
+        self.font = font
+        self.size = size
+        self.px = px
+        self.py = py
+
+        self.myfont = pygame.font.SysFont(self.font, self.size, bold = True)
+
+    def resetScore(self, val = 0):
+        self.score1 = val
+        self.score2 = val
+
+    def incScore(self, whichScore, val = 1):
+        if whichScore == 1:
+            self.score1 += val
+        elif whichScore == 2:
+            self.score2 += val
+
+
+    def draw(self, screen):
+        score1text = self.myfont.render(str(self.score1), True, self.colour)
+        score2text = self.myfont.render(str(self.score2), True, self.colour)
+
+        screen.blit(score1text, (self.px, self.py))
+        screen.blit(score2text, (WH[0]-self.px-self.size/2.0, self.py))
+
+ball = Ball(WH[0]/2.0, WH[1]/2.0, 0, 5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 50, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
+score = Score(0, 0, 20, WH[1]/2.0-30)
 
 pygame.mouse.set_visible(False)
 
@@ -121,10 +154,22 @@ while True:
     windowSurface.fill((0, 0, 0))
 
     ball.move(pad1, pad2)
+
     ball.draw(windowSurface)
+    
+    if ball.py <= 0:
+        score.incScore(1)
+        pygame.time.delay(1000)
+        ball.set_p(WH[0]/2.0, WH[1]/2.0)
+    elif ball.py >= WH[1]:
+        score.incScore(2)
+        pygame.time.delay(1000)
+        ball.set_p(WH[0]/2.0, WH[1]/2.0)
+
     pad2.update()
     pad1.draw(windowSurface)
     pad2.draw(windowSurface)
+    score.draw(windowSurface)
 
     for event in pygame.event.get():
         if event.type == QUIT:
