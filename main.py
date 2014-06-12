@@ -26,6 +26,9 @@ class Ball(object):
         self.rect = self.surface.get_rect(center =(px, py))
         self.surface.fill(self.colour)
 
+        self.bounce = pygame.mixer.Sound("pad.wav")
+        
+
     def draw(self, screen):
         screen.blit(self.surface, self.rect)
 
@@ -47,10 +50,12 @@ class Ball(object):
     def touchPaddle(self, pad1, pad2):
         if self.rect.top <= pad1.rect.bottom and self.rect.right >= pad1.rect.left and self.rect.left <= pad1.rect.right:
             if self.rect.bottom >= pad1.rect.top:
+                self.bounce.play()
                 return 1
 
         elif self.rect.bottom >= pad2.rect.top and self.rect.right >= pad2.rect.left and self.rect.left <= pad2.rect.right:
             if self.rect.top <= pad2.rect.bottom:
+                self.bounce.play()
                 return 2
 
         else:
@@ -142,9 +147,11 @@ class Score(object):
         screen.blit(score1text, (self.px, self.py))
         screen.blit(score2text, (WH[0]-self.px-self.size/2.0, self.py))
 
+
+
 ball = Ball(WH[0]/2.0, WH[1]/2.0, 0, 5, 10, 10)
-pad1 = Paddle(WH[0]/2, 20, 50, 10)
-pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
+pad1 = Paddle(WH[0]/2, 20, 100, 10)
+pad2 = Paddle(WH[0]/2, WH[1] - 20, 100, 10)
 score = Score(0, 0, 20, WH[1]/2.0-30)
 
 pygame.mouse.set_visible(False)
@@ -159,11 +166,9 @@ while True:
     
     if ball.py <= 0:
         score.incScore(1)
-        pygame.time.delay(1000)
         ball.set_p(WH[0]/2.0, WH[1]/2.0)
     elif ball.py >= WH[1]:
         score.incScore(2)
-        pygame.time.delay(1000)
         ball.set_p(WH[0]/2.0, WH[1]/2.0)
 
     pad2.update()
