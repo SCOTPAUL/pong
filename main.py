@@ -54,6 +54,7 @@ class Ball(object):
             print self.rect.top, pad1.rect.bottom
             self.paddleReflect()
             self.py = 31
+            
 
         if self.rect.bottom >= pad2.rect.top and self.rect.right >= pad2.rect.left and self.rect.left <= pad2.rect.right:
             self.paddleReflect()
@@ -92,12 +93,14 @@ class Paddle(object):
 
 class Score(object):
 
-    def __init__(self, score1, score2, colour = (255, 255, 255), font = "Lucida Console", size = 30):
+    def __init__(self, score1, score2, px, py, colour = (255, 255, 255), font = "Lucida Console", size = 30):
         self.score1 = score1
         self.score2 = score2
         self.colour = colour
         self.font = font
         self.size = size
+        self.px = px
+        self.py = py
 
         self.myfont = pygame.font.SysFont(self.font, self.size, bold = True)
 
@@ -112,13 +115,13 @@ class Score(object):
         score1text = self.myfont.render(str(self.score1), True, self.colour)
         score2text = self.myfont.render(str(self.score2), True, self.colour)
 
-        screen.blit(score1text, (20, 20))
-        screen.blit(score2text, (WH[0]-20-self.size/2.0, 20))
+        screen.blit(score1text, (self.px, self.py))
+        screen.blit(score2text, (WH[0]-self.px-self.size/2.0, self.py))
 
 ball = Ball(WH[0]/2, WH[1]/2, 0, -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 50, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
-score = Score(0, 0)
+score = Score(0, 0, 20, WH[1]/2.0-30)
 
 
 while True:
