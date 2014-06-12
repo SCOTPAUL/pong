@@ -90,7 +90,6 @@ class Paddle(object):
         mouseX = pygame.mouse.get_pos()[0]
         self.px = mouseX
         self.rect = self.surface.get_rect(center =(self.px, self.py))
-        print mouseX
 
 
     def draw(self, screen):
@@ -100,6 +99,8 @@ class Paddle(object):
 ball = Ball(WH[0]/2, WH[1]/2, 0, -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 50, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 50, 10)
+
+pygame.mouse.set_visible(False)
 
 
 while True:
