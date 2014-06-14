@@ -117,8 +117,13 @@ class Paddle(object):
         self.px = px
         self.py = py
 
+    def update(self, updateX):
+        self.px += updateX
+        self.rect = self.surface.get_rect(center =(self.px, self.py))
 
-    def update(self):
+
+
+    def updateMouse(self):
         mouseX = pygame.mouse.get_pos()[0]
         self.px = mouseX
         self.rect = self.surface.get_rect(center =(self.px, self.py))
@@ -161,7 +166,7 @@ class Score(object):
 
 
 
-ball = Ball(WH[0]/2.0, WH[1]/2.0, 0, -5, 10, 10)
+ball = Ball(WH[0]/2.0, WH[1]/2.0, 1, -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 100, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 100, 10)
 score = Score(0, 0, 20, WH[1]/2.0-30)
@@ -184,8 +189,14 @@ while True:
         ball.reset()
 
 
+    if ball.px > pad1.px:
+        pad1.update(2)
+    elif ball.px < pad1.px:
+        pad1.update(-2)
 
-    pad2.update()
+
+
+    pad2.updateMouse()
     pad1.draw(windowSurface)
     pad2.draw(windowSurface)
     score.draw(windowSurface)
