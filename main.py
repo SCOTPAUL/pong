@@ -160,17 +160,39 @@ class Score(object):
         screen.blit(score2text, (WH[0]-self.px-self.size/2.0, self.py))
 
 
+def drawMidline(screen, WH, h, num, spacing = 20, colour = (255, 255, 255)):
+    midpoint = WH[1]/2.0
+
+    totalSpace = WH[0] - (num-1)*spacing
+    width = totalSpace/float(num)
+
+    myRect = pygame.Surface([width, h])
+    myRect.fill(colour)
+
+    startX = width/2.0
+
+    for line in range(num):
+        thisRect = myRect.get_rect(center =(startX, midpoint))
+        screen.blit(myRect, thisRect)
+        startX += spacing + width
+
+    
+
+
+
+
 
 ball = Ball(WH[0]/2.0, WH[1]/2.0, 0, -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 100, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 100, 10)
-score = Score(0, 0, 20, WH[1]/2.0-30)
+score = Score(0, 0, 20, 20)
 
 pygame.mouse.set_visible(False)
 
 
 while True:
     windowSurface.fill((0, 0, 0))
+    drawMidline(windowSurface, WH, 5, 20)
 
     ball.move(pad1, pad2)
 
