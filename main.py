@@ -15,6 +15,8 @@ pygame.display.set_caption("Pong")
 class Ball(object):
 
     def __init__(self, px, py, vx, vy, w ,h, colour = (255, 255, 255)):
+        self.init = [px, py, vx, vy, w ,h, colour]
+
         self.px = px
         self.py = py
         self.vx = vx
@@ -36,8 +38,9 @@ class Ball(object):
         screen.blit(self.surface, self.rect)
 
 
-    def destroy(self):
-        del self
+    def reset(self):
+        self.set_v(self.init[2], self.init[3])
+        self.set_p(self.init[0], self.init[1])
 
 
     def set_p(self, px, py):
@@ -175,10 +178,10 @@ while True:
     
     if ball.py <= 0:
         score.incScore(1)
-        ball.set_p(WH[0]/2.0, WH[1]/2.0)
+        ball.reset()
     elif ball.py >= WH[1]:
         score.incScore(2)
-        ball.set_p(WH[0]/2.0, WH[1]/2.0)
+        ball.reset()
 
 
 
