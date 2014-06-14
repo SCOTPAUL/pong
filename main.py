@@ -20,9 +20,12 @@ class Ball(object):
         self.vx = vx
         self.vy = vy
 
+        self.w = w
+        self.h = h
+
         self.colour = colour
         
-        self.surface = pygame.Surface([w, h])
+        self.surface = pygame.Surface([self.w, self.h])
         self.rect = self.surface.get_rect(center =(px, py))
         self.surface.fill(self.colour)
 
@@ -70,14 +73,20 @@ class Ball(object):
         self.px += self.vx
         self.py += self.vy
 
+        if self.px <= 0:
+            self.sideReflect()
+        elif self.px >= WH[0]:
+            self.sideReflect()
+
+
         if self.touchPaddle(pad1, pad2) == 1:
             self.paddleReflect()
-            self.py = 31
+            self.py = pad1.rect.bottom + self.h/2.0 + 1
             
 
         if self.touchPaddle(pad1, pad2) == 2:
             self.paddleReflect()
-            self.py = WH[1] - 31
+            self.py = pad2.rect.top - self.h/2.0 - 1
 
 
     def sideReflect(self):
@@ -149,7 +158,7 @@ class Score(object):
 
 
 
-ball = Ball(WH[0]/2.0, WH[1]/2.0, 0, 5, 10, 10)
+ball = Ball(WH[0]/2.0, WH[1]/2.0, 0, -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 100, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 100, 10)
 score = Score(0, 0, 20, WH[1]/2.0-30)
@@ -170,6 +179,8 @@ while True:
     elif ball.py >= WH[1]:
         score.incScore(2)
         ball.set_p(WH[0]/2.0, WH[1]/2.0)
+
+
 
     pad2.update()
     pad1.draw(windowSurface)
