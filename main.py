@@ -2,6 +2,7 @@
 
 import pygame, sys
 from pygame.locals import *
+from random import randint
 
 WH = (640, 480)
 
@@ -14,12 +15,17 @@ pygame.display.set_caption("Pong")
 
 class Ball(object):
 
-    def __init__(self, px, py, vx, vy, w ,h, colour = (255, 255, 255)):
+    def __init__(self, px, py, vx, vy, w ,h, colour = (255, 255, 255), randRange = [-5,5]):
         self.init = [px, py, vx, vy, w ,h, colour]
 
         self.px = px
         self.py = py
-        self.vx = vx
+
+        if vx == "Random":
+            self.vx = randint(randRange[0], randRange[1])
+        else:
+            self.vx = vx
+
         self.vy = vy
 
         self.w = w
@@ -38,8 +44,14 @@ class Ball(object):
         screen.blit(self.surface, self.rect)
 
 
-    def reset(self):
-        self.set_v(self.init[2], self.init[3])
+    def reset(self, randX = True, xVals = [-5, 5]):
+        randomX = randint(xVals[0], xVals[1])
+
+        if randX:
+            self.set_v(randomX, self.init[3])
+        else:
+            self.set_v(self.init[2], self.init[3])
+            
         self.set_p(self.init[0], self.init[1])
 
 
@@ -166,7 +178,7 @@ class Score(object):
 
 
 
-ball = Ball(WH[0]/2.0, WH[1]/2.0, 1, -5, 10, 10)
+ball = Ball(WH[0]/2.0, WH[1]/2.0, "Random", -5, 10, 10)
 pad1 = Paddle(WH[0]/2, 20, 100, 10)
 pad2 = Paddle(WH[0]/2, WH[1] - 20, 100, 10)
 score = Score(0, 0, 20, WH[1]/2.0-30)
